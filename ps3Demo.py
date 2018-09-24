@@ -39,15 +39,15 @@ class ps3GoPiGo:
                 self.motors.ranging()
             if self.controller.buttons['up'] == 1:
                 self.headActive = True
-                self.motors.led(0,0,255,'LED_WIFI')
+                self.motors.led(0,0,255,4)
             if self.controller.buttons['down'] == 1:
                 self.headActive = False
-                self.motors.led(0, 0, 0, 'LED_WIFI')
+                self.motors.led(0, 0, 0,4)
 
             if self.headActive:
-                if self.controller.axes['l2'] > 0:
+                if self.controller.axes['l2'] > -.9:
                     self.motors.slewHead(-self.controller.axes['l2'])
-                elif self.controller.axes['r2'] > 0:
+                elif self.controller.axes['r2'] > -.9:
                     self.motors.slewHead(self.controller.axes['r2'])
 
 
@@ -140,16 +140,18 @@ class motorController:
         if angle < -90:
             angle = -90
         angle = self.scale(angle,-90,90,2000,700)
-        self.gpg.set_servo(self.gpg.SERVO_1,angle)
+        self.gpg.set_servo(self.gpg.SERVO_1,int(angle))
 
     def ranging(self):
         print(self.distSensor.read_mm())
 
     def slewHead(self,rate):
-        self.headAngle += rate
+        self.headAngle += self.scale(rate,-0.9,1.0,0,1)
         self.head(self.headAngle)
 
     def led(self,r,g,b,led):
+        leds = [self.gpg.LED_EYE_LEFT,self.gpg.LED_EYE_RIGHT,self.gpg.LED_BLINKER_LEFT,self.gpg.LED_BLINKER_RIGHT,self.gpg.LED_WIFI]
+        led = leds[led]
         self.gpg.set_led(led,r,g,b)
 
 
