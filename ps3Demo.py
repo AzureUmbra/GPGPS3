@@ -55,6 +55,8 @@ class ps3GoPiGo:
                 self.motors.head(self.headAngle)
                 self.motors.rangeLights()
 
+            sleep(50/1000)
+
 
 
 class motorController:
