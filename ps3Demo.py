@@ -29,7 +29,6 @@ class ps3GoPiGo:
 
             if self.mode == 0:
                 self.motors.motors(0,0)
-                self.motors.head(0)
             elif self.mode == 1:
                 self.motors.driveModThresholdCircle(self.controller.axes['leftH'], self.controller.axes['leftV'])
             elif self.mode == 2:
@@ -43,9 +42,10 @@ class ps3GoPiGo:
             if self.controller.buttons['down'] == 1:
                 self.headActive = False
                 self.motors.led(0, 0, 0,4)
+                self.motors.head(0)
 
             if self.headActive and self.mode != 2:
-                self.motors.head(self.controller.axes['rightH'])
+                self.motors.head(round(self.controller.axes['rightH'],2))
 
 
 
@@ -131,8 +131,8 @@ class motorController:
 
     def head(self,angle):
         #700-2000
-        angle = int(round(self.scale(angle,-1,1,2000,700),-1))
-        self.gpg.set_servo(self.gpg.SERVO_1,int(angle))
+        angle = int(self.scale(angle,-1,1,2000,700))
+        self.gpg.set_servo(self.gpg.SERVO_1,angle)
 
     def ranging(self):
         print(self.distSensor.read_mm())
