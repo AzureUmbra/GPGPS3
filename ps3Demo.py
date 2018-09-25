@@ -48,9 +48,9 @@ class ps3GoPiGo:
             if self.headActive and self.mode != 2:
                 #self.motors.head(round(self.controller.axes['rightH'],2))
                 if (1.0+self.controller.axes['l2'])/2.0 > 0.1 and self.headAngle > -90:
-                    self.headAngle -= round((1.0+self.controller.axes['l2'])/2.0,2)
+                    self.headAngle -= ((1.0+self.controller.axes['l2'])/2.0)/10
                 elif (1.0+self.controller.axes['r2'])/2.0 > 0.1 and self.headAngle < 90:
-                    self.headAngle += round((1.0+self.controller.axes['r2'])/2.0,2)
+                    self.headAngle += ((1.0+self.controller.axes['r2'])/2.0)/10
                 self.motors.head(self.headAngle)
 
 
