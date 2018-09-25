@@ -41,7 +41,7 @@ class ps3GoPiGo:
                 elif self.controller.buttons['square'] == 1 and not self.headActive:
                     print('MODE: 4')
                     self.motors.driveAuto(self.controller)
-                    print('Self Drive Done!...MODE: 0')
+                    print('Self Drive Done!\nMODE: 0')
 
             if self.mode == 0:
                 self.motors.motors(0,0)
@@ -129,16 +129,16 @@ class motorController:
             if control.buttons['start'] == 1:
                 run = False
             count += 1
-            if count == 1:
+            if count == 0:
                 print('left')
                 self.gpg.set_led(self.gpg.LED_EYE_LEFT,255,0,0)
                 self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 0, 0, 255)
-            elif count == 4:
+            elif count == 1:
                 print('right')
                 self.gpg.set_led(self.gpg.LED_EYE_LEFT, 0, 0, 255)
                 self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 255, 0, 0)
-            elif count == 7:
-                count = 0
+            elif count == 2:
+                count = -1
             if mode == 0:
                 dist = self.ranging()
                 if dist < 150:
