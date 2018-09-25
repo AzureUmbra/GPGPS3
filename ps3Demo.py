@@ -131,7 +131,7 @@ class motorController:
 
     def head(self,angle):
         #700-2000
-        angle = self.scale(angle,-1,1,2000,700)
+        angle = int(round(self.scale(angle,-1,1,2000,700),-1))
         self.gpg.set_servo(self.gpg.SERVO_1,int(angle))
 
     def ranging(self):
