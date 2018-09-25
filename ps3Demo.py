@@ -65,7 +65,7 @@ class ps3GoPiGo:
                 else:
                     self.motors.led(0, 0, 0, 0)
                     self.motors.led(0, 0, 0, 1)
-                    self.motors.driveModThresholdCircle(self.controller.axes['leftH'], self.controller.axes['leftV'])
+                    self.motors.driveModThresholdCircle(self.controller.axes['leftH'], self.controller.axes['leftV'],(float(range-150)/2150))
 
 
             if self.controller.buttons['up'] == 1 and self.mode != 3:
@@ -104,7 +104,7 @@ class motorController:
         self.head(0)
         self.curColor = 0
 
-    def driveModThresholdCircle(self,x,y):
+    def driveModThresholdCircle(self,x,y,mut=1.0):
         r,theta = self.rTheta(x,y)
         left = int(round(self.scale(r,0.0,1.0,0,self.maxSpeed),0))
         right = left
@@ -118,7 +118,7 @@ class motorController:
         else:
             right = -right
             left = int(round(left * self.scale(theta,270,360,-1,1),0))
-        self.motors(left,right)
+        self.motors(left*mut,right*mut)
 
     def driveAuto(self,control):
         run = True
@@ -172,8 +172,8 @@ class motorController:
         self.motors(left,right)
 
     def motors(self,left,right):
-        self.gpg.set_motor_dps(self.gpg.MOTOR_LEFT, left)
-        self.gpg.set_motor_dps(self.gpg.MOTOR_RIGHT, right)
+        self.gpg.set_motor_dps(self.gpg.MOTOR_LEFT, int(left))
+        self.gpg.set_motor_dps(self.gpg.MOTOR_RIGHT, int(right))
         #print('Left: ' + str(left) + ' Right: ' + str(right))
 
     def toSpeed(self,value):
