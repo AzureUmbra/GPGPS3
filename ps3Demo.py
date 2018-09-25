@@ -3,6 +3,7 @@ import gopigo3
 import easygopigo3
 from time import sleep
 import math
+from random import random, randint
 
 class ps3GoPiGo:
     def __init__(self,delay):
@@ -37,6 +38,9 @@ class ps3GoPiGo:
                     self.mode = 3
                     print('MODE: 3')
                     self.motors.led(128, 0, 0, 4)
+                elif self.controller.buttons['square'] == 1 and not self.headActive:
+                    self.mode = 4
+                    print('MODE: 4')
 
             if self.mode == 0:
                 self.motors.motors(0,0)
@@ -61,6 +65,8 @@ class ps3GoPiGo:
                     self.motors.led(0, 0, 0, 0)
                     self.motors.led(0, 0, 0, 1)
                     self.motors.driveModThresholdCircle(self.controller.axes['leftH'], self.controller.axes['leftV'])
+            elif self.mode == 4:
+                self.motors.driveAuto()
 
             if self.controller.buttons['up'] == 1 and self.mode != 3:
                 self.headActive = True
@@ -80,12 +86,13 @@ class ps3GoPiGo:
                 if self.count > 500:
                     self.motors.rangeLights()
                     self.count = 0
+            sleep(0.08)
 
 
 
 class motorController:
 
-    def __init__(self,speedLimit=255,axisLimit=1.0):
+    def __init__(self,speedLimit=300,axisLimit=1.0):
         self.minSpeed = -(speedLimit)
         self.maxSpeed = speedLimit
         self.minAxis = -(axisLimit)
@@ -112,6 +119,43 @@ class motorController:
             right = -right
             left = int(round(left * self.scale(theta,270,360,-1,1),0))
         self.motors(left,right)
+
+    def driveAuto(self):
+        run = True
+        mode = 0
+        count = 0
+        while run:
+            count += 1
+            if count == 20:
+                self.led(255,0,0,0)
+                self.led(0,0,255,1)
+            elif count == 40:
+                self.led(255, 0, 0, 1)
+                self.led(0, 0, 255, 0)
+                count = 0
+            if mode == 0:
+                dist = self.ranging()
+                if dist < 150:
+                    self.motors(0,0)
+                    mode = 1
+                elif 2300 > dist > 150:
+                    speed = 100 + (200*(float(dist-150)/2150))
+                    self.motors(speed,speed)
+                else:
+                    self.motors(300,300)
+            elif mode == 1:
+                if randint(0,100) > 50:
+                    self.motors(-100,100)
+                else:
+                    self.motors(100,-100)
+                mode = 2
+            elif mode == 2:
+                dist = self.ranging()
+                if dist > 500:
+                    self.motors(0,0)
+                    run = False
+            sleep(0.08)
+
 
     def driveTank(self,x,y):
         left = self.toSpeed(x)
