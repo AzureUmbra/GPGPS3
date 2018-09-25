@@ -11,6 +11,7 @@ class ps3GoPiGo:
         self.motors = motorController()
         self.headActive = False
         self.headAngle = 0
+        self.count = 0
 
     def run(self):
         done = False
@@ -53,7 +54,10 @@ class ps3GoPiGo:
                 elif (1.0+self.controller.axes['r2'])/2.0 > 0.1 and self.headAngle < 90:
                     self.headAngle += ((1.0+self.controller.axes['r2'])/2.0)/5
                 self.motors.head(self.headAngle)
-                self.motors.rangeLights()
+                self.count += 1
+                if self.count > 20:
+                    self.motors.rangeLights()
+                    self.count = 0
 
             sleep(50/1000)
 
