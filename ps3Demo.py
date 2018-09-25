@@ -46,7 +46,7 @@ class ps3GoPiGo:
                 self.motors.driveTank(self.controller.axes['leftV'],self.controller.axes['rightV'])
             elif self.mode == 3:
                 self.count += 1
-                if self.count > 1000:
+                if self.count > 500:
                     range = self.motors.ranging()
                     self.count = 0
                 if range < 100 and not rangeLock:
@@ -77,7 +77,7 @@ class ps3GoPiGo:
                 #     self.headAngle += ((1.0+self.controller.axes['r2'])/2.0)/5
                 # self.motors.head(self.headAngle)
                 self.count += 1
-                if self.count > 1000:
+                if self.count > 500:
                     self.motors.rangeLights()
                     self.count = 0
 
