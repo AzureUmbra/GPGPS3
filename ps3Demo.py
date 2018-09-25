@@ -15,6 +15,7 @@ class ps3GoPiGo:
 
     def run(self):
         done = False
+        rangeLock = False
         while not done:
             self.controller.update()
 
@@ -28,6 +29,9 @@ class ps3GoPiGo:
                 elif self.controller.buttons['triangle'] == 1:
                     self.mode = 2
                     print('MODE: 2')
+                elif self.controller.buttons['square'] == 1 and not self.headActive:
+                    self.mode = 3
+                    print('MODE: 3')
 
             if self.mode == 0:
                 self.motors.motors(0,0)
@@ -35,8 +39,18 @@ class ps3GoPiGo:
                 self.motors.driveModThresholdCircle(self.controller.axes['leftH'], self.controller.axes['leftV'])
             elif self.mode == 2:
                 self.motors.driveTank(self.controller.axes['leftV'],self.controller.axes['rightV'])
+            elif self.mode == 3:
+                range = self.motors.ranging()
+                if range < 100 and not rangeLock:
+                    rangeLock = True
+                elif range > 300 and rangeLock:
+                    rangeLock = False
+                if rangeLock:
+                    self.motors.motors(-100,-100)
+                else:
+                    self.motors.driveModThresholdCircle(self.controller.axes['leftH'], self.controller.axes['leftV'])
 
-            if self.controller.buttons['up'] == 1:
+            if self.controller.buttons['up'] == 1 and self.mode != 3:
                 self.headActive = True
             if self.controller.buttons['down'] == 1:
                 self.headActive = False
