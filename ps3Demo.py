@@ -10,6 +10,7 @@ class ps3GoPiGo:
         self.controller = PS3(delay)
         self.motors = motorController()
         self.headActive = False
+        self.headAngle = 0
 
     def run(self):
         done = False
@@ -45,7 +46,12 @@ class ps3GoPiGo:
                 self.motors.head(0)
 
             if self.headActive and self.mode != 2:
-                self.motors.head(round(self.controller.axes['rightH'],2))
+                #self.motors.head(round(self.controller.axes['rightH'],2))
+                if (1.0+self.controller.axes['l2'])/2.0 > 0.1 and self.headAngle > -90:
+                    self.headAngle -= round((1.0+self.controller.axes['l2'])/2.0,2)
+                elif (1.0+self.controller.axes['r2'])/2.0 > 0.1 and self.headAngle < 90:
+                    self.headAngle += round((1.0+self.controller.axes['r2'])/2.0,2)
+                self.motors.head(round(self.headAngle,0))
 
 
 
