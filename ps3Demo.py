@@ -39,8 +39,9 @@ class ps3GoPiGo:
                     print('MODE: 3')
                     self.motors.led(128, 0, 0, 4)
                 elif self.controller.buttons['square'] == 1 and not self.headActive:
-                    self.mode = 4
                     print('MODE: 4')
+                    self.motors.driveAuto(self.controller)
+                    print('Self Drive Done!...MODE: 0')
 
             if self.mode == 0:
                 self.motors.motors(0,0)
@@ -65,8 +66,7 @@ class ps3GoPiGo:
                     self.motors.led(0, 0, 0, 0)
                     self.motors.led(0, 0, 0, 1)
                     self.motors.driveModThresholdCircle(self.controller.axes['leftH'], self.controller.axes['leftV'])
-            elif self.mode == 4:
-                self.motors.driveAuto()
+
 
             if self.controller.buttons['up'] == 1 and self.mode != 3:
                 self.headActive = True
@@ -120,11 +120,14 @@ class motorController:
             left = int(round(left * self.scale(theta,270,360,-1,1),0))
         self.motors(left,right)
 
-    def driveAuto(self):
+    def driveAuto(self,control):
         run = True
         mode = 0
         count = 0
         while run:
+            control.update()
+            if control.buttons['start'] == 1:
+                run = False
             count += 1
             if count == 0:
                 self.led(255,0,0,0)
