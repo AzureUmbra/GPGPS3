@@ -158,9 +158,12 @@ class motorController:
             elif mode == 2:
                 dist = self.ranging()
                 if dist > 500:
+                    sleep(0.25)
                     self.motors(0,0)
                     mode = 0
             sleep(0.08)
+        self.gpg.set_led(self.gpg.LED_EYE_LEFT, 0, 0, 0)
+        self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 0, 0, 0)
 
 
     def driveTank(self,x,y):
