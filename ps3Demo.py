@@ -1,7 +1,7 @@
 from ps3Controller import PS3
 import gopigo3
 import easygopigo3
-import time
+from time import sleep
 import math
 
 class ps3GoPiGo:
