@@ -44,11 +44,8 @@ class ps3GoPiGo:
                 self.headActive = False
                 self.motors.led(0, 0, 0,4)
 
-            if self.headActive:
-                if self.controller.axes['l2'] > -.5:
-                    self.motors.slewHead(self.controller.axes['l2'],True)
-                elif self.controller.axes['r2'] > -.5:
-                    self.motors.slewHead(self.controller.axes['r2'],False)
+            if self.headActive and self.mode != 2:
+                self.motors.head(self.controller.axes['rightH'])
 
 
 
@@ -63,8 +60,7 @@ class motorController:
         self.gpg = gopigo3.GoPiGo3()
         self.egpg = easygopigo3.EasyGoPiGo3()
         self.distSensor = self.egpg.init_distance_sensor()
-        self.headAngle = 0
-        self.head(self.headAngle)
+        self.head(0)
 
     def driveModThresholdCircle(self,x,y):
         r,theta = self.rTheta(x,y)
@@ -135,24 +131,19 @@ class motorController:
 
     def head(self,angle):
         #700-2000
-        if angle > 90:
-            angle = 90
-        if angle < -90:
-            angle = -90
-        self.headAngle = angle
-        angle = self.scale(angle,-90,90,2000,700)
+        angle = self.scale(angle,-1,1,2000,700)
         self.gpg.set_servo(self.gpg.SERVO_1,int(angle))
 
     def ranging(self):
         print(self.distSensor.read_mm())
 
-    def slewHead(self,rate,clockwise):
-        if clockwise:
-            self.headAngle = self.headAngle + rate + .5
-        else:
-            self.headAngle = self.headAngle - (rate + .5)
-        print(self.headAngle)
-        self.head(self.headAngle)
+    # def slewHead(self,rate,clockwise):
+    #     if clockwise:
+    #         self.headAngle = self.headAngle + rate + .5
+    #     else:
+    #         self.headAngle = self.headAngle - (rate + .5)
+    #     print(self.headAngle)
+    #     self.head(self.headAngle)
 
     def led(self,r,g,b,led):
         leds = [self.gpg.LED_EYE_LEFT,self.gpg.LED_EYE_RIGHT,self.gpg.LED_BLINKER_LEFT,self.gpg.LED_BLINKER_RIGHT,self.gpg.LED_WIFI]
