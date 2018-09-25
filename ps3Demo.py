@@ -123,12 +123,14 @@ class motorController:
     def driveAuto(self,control):
         run = True
         mode = 0
-        count = 0
+        count = -1
         while run:
             control.update()
             if control.buttons['start'] == 1:
                 run = False
             count += 1
+            if count == 2:
+                count = 0
             if count == 0:
                 print('left')
                 self.gpg.set_led(self.gpg.LED_EYE_LEFT,255,0,0)
@@ -137,8 +139,6 @@ class motorController:
                 print('right')
                 self.gpg.set_led(self.gpg.LED_EYE_LEFT, 0, 0, 255)
                 self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 255, 0, 0)
-            elif count == 2:
-                count = -1
             if mode == 0:
                 dist = self.ranging()
                 if dist < 150:
