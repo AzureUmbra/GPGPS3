@@ -51,7 +51,7 @@ class ps3GoPiGo:
                     self.headAngle -= round((1.0+self.controller.axes['l2'])/2.0,2)
                 elif (1.0+self.controller.axes['r2'])/2.0 > 0.1 and self.headAngle < 90:
                     self.headAngle += round((1.0+self.controller.axes['r2'])/2.0,2)
-                self.motors.head(round(self.headAngle,0))
+                self.motors.head(self.headAngle)
 
 
 
@@ -137,7 +137,7 @@ class motorController:
 
     def head(self,angle):
         #700-2000
-        angle = int(self.scale(angle,-1,1,2000,700))
+        angle = int(self.scale(angle,-90,90,2000,700))
         self.gpg.set_servo(self.gpg.SERVO_1,angle)
 
     def ranging(self):
