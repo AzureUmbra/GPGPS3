@@ -55,17 +55,15 @@ class PS3:
 
 
     def update(self):
-        for event in pygame.event.get():
-            if event.type == pygame.JOYBUTTONDOWN or event.type == pygame.JOYBUTTONUP:
-                for i in self.buttonLayout.keys():
-                    self.buttons[i] = self.joy.get_button(self.buttonLayout[i])
-            elif event.type == pygame.JOYAXISMOTION:
-                for i in self.axisLayout.keys():
-                    if i != 'invert':
-                        if self.axisLayout['invert'][i] == 0:
-                            self.axes[i] = self.joy.get_axis(self.axisLayout[i])
-                        else:
-                            self.axes[i] = -self.joy.get_axis(self.axisLayout[i])
+        pygame.event.get()
+        for i in self.buttonLayout.keys():
+            self.buttons[i] = self.joy.get_button(self.buttonLayout[i])
+        for i in self.axisLayout.keys():
+            if i != 'invert':
+                if self.axisLayout['invert'][i] == 0:
+                    self.axes[i] = self.joy.get_axis(self.axisLayout[i])
+                else:
+                    self.axes[i] = -self.joy.get_axis(self.axisLayout[i])
         sleep(self.delay)
 
 

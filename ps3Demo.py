@@ -126,10 +126,10 @@ class motorController:
         count = 0
         while run:
             count += 1
-            if count == 20:
+            if count == 0:
                 self.led(255,0,0,0)
                 self.led(0,0,255,1)
-            elif count == 40:
+            elif count == 2:
                 self.led(255, 0, 0, 1)
                 self.led(0, 0, 255, 0)
                 count = 0
