@@ -22,16 +22,20 @@ class ps3GoPiGo:
             if self.mode != 0 and self.controller.buttons['select'] == 1:
                 self.mode = 0
                 print('MODE: 0')
+                self.motors.led(0,0,0,4)
             elif self.mode == 0:
                 if self.controller.buttons['cross'] == 1:
                     self.mode = 1
                     print('MODE: 1')
+                    self.motors.led(0, 0, 128, 4)
                 elif self.controller.buttons['triangle'] == 1:
                     self.mode = 2
                     print('MODE: 2')
-                elif self.controller.buttons['square'] == 1 and not self.headActive:
+                    self.motors.led(0, 128, 0, 4)
+                elif self.controller.buttons['circle'] == 1 and not self.headActive:
                     self.mode = 3
                     print('MODE: 3')
+                    self.motors.led(128, 0, 0, 4)
 
             if self.mode == 0:
                 self.motors.motors(0,0)
@@ -40,14 +44,21 @@ class ps3GoPiGo:
             elif self.mode == 2:
                 self.motors.driveTank(self.controller.axes['leftV'],self.controller.axes['rightV'])
             elif self.mode == 3:
-                range = self.motors.ranging()
+                self.count += 1
+                if self.count > 1000:
+                    range = self.motors.ranging()
+                    self.count = 0
                 if range < 100 and not rangeLock:
                     rangeLock = True
                 elif range > 300 and rangeLock:
                     rangeLock = False
                 if rangeLock:
                     self.motors.motors(-100,-100)
+                    self.motors.led(255, 0, 0, 0)
+                    self.motors.led(255, 0, 0, 1)
                 else:
+                    self.motors.led(0, 0, 0, 0)
+                    self.motors.led(0, 0, 0, 1)
                     self.motors.driveModThresholdCircle(self.controller.axes['leftH'], self.controller.axes['leftV'])
 
             if self.controller.buttons['up'] == 1 and self.mode != 3:
