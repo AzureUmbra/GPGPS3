@@ -75,6 +75,7 @@ class motorController:
         self.egpg = easygopigo3.EasyGoPiGo3()
         self.distSensor = self.egpg.init_distance_sensor()
         self.head(0)
+        self.curColor = 0
 
     def driveModThresholdCircle(self,x,y):
         r,theta = self.rTheta(x,y)
@@ -158,18 +159,26 @@ class motorController:
             rnge = self.ranging()
             if rnge >= 2000:
                 r,g,b=0,0,255
+                newColor = 0
             elif 2000 > rnge >= 1000:
                 r,g,b = 0,255,0
+                newColor = 1
             elif 1000 > rnge >= 500:
                 r,g,b = 128,255,0
+                newColor = 2
             elif 500 > rnge >= 100:
                 r,g,b = 255,255,0
+                newColor = 3
             elif 100 > rnge >= 50:
                 r,g,b = 255,128,0
+                newColor = 4
             elif 50 > rnge:
                 r,g,b = 255,0,0
-            self.led(r,g,b,0)
-            self.led(r,g,b,1)
+                newColor = 5
+            if self.curColor != newColor:
+                self.curColor = newColor
+                self.led(r,g,b,0)
+                self.led(r,g,b,1)
 
     # def slewHead(self,rate,clockwise):
     #     if clockwise:
