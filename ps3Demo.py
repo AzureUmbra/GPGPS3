@@ -139,6 +139,7 @@ class motorController:
             angle = 90
         if angle < -90:
             angle = -90
+        self.headAngle = angle
         angle = self.scale(angle,-90,90,2000,700)
         self.gpg.set_servo(self.gpg.SERVO_1,int(angle))
 
@@ -150,6 +151,7 @@ class motorController:
             self.headAngle += self.scale(rate,-0.5,1.0,0,1)
         else:
             self.headAngle -= self.scale(rate, -0.5, 1.0, 0, 1)
+        print(self.headAngle)
         self.head(self.headAngle)
 
     def led(self,r,g,b,led):

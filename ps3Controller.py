@@ -47,6 +47,8 @@ class PS3:
             self.buttons[i] = 0
         for i in self.axes.keys():
             self.axes[i] = 0
+        self.axes[2] = -1
+        self.axes[5] = -1
 
         self.delay = delay/1000
 
