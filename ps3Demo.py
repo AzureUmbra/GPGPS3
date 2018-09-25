@@ -48,18 +48,16 @@ class ps3GoPiGo:
                 self.motors.rangeLights(True)
 
             if self.headActive and self.mode != 2:
-                #self.motors.head(round(self.controller.axes['rightH'],2))
-                if (1.0+self.controller.axes['l2'])/2.0 > 0.1 and self.headAngle > -90:
-                    self.headAngle -= ((1.0+self.controller.axes['l2'])/2.0)/5
-                elif (1.0+self.controller.axes['r2'])/2.0 > 0.1 and self.headAngle < 90:
-                    self.headAngle += ((1.0+self.controller.axes['r2'])/2.0)/5
-                self.motors.head(self.headAngle)
+                self.motors.head(round(self.controller.axes['rightH'],2))
+                # if (1.0+self.controller.axes['l2'])/2.0 > 0.1 and self.headAngle > -90:
+                #     self.headAngle -= ((1.0+self.controller.axes['l2'])/2.0)/5
+                # elif (1.0+self.controller.axes['r2'])/2.0 > 0.1 and self.headAngle < 90:
+                #     self.headAngle += ((1.0+self.controller.axes['r2'])/2.0)/5
+                # self.motors.head(self.headAngle)
                 self.count += 1
-                if self.count > 20:
+                if self.count > 1000:
                     self.motors.rangeLights()
                     self.count = 0
-
-            sleep(50/1000)
 
 
 
@@ -146,7 +144,7 @@ class motorController:
 
     def head(self,angle):
         #700-2000
-        angle = int(self.scale(angle,-90,90,2000,700))
+        angle = int(self.scale(angle,-1,1,2000,700))
         self.gpg.set_servo(self.gpg.SERVO_1,angle)
 
     def ranging(self):
