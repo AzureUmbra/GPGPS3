@@ -45,10 +45,10 @@ class ps3GoPiGo:
                 self.motors.led(0, 0, 0,4)
 
             if self.headActive:
-                if self.controller.axes['l2'] > -.9:
-                    self.motors.slewHead(-self.controller.axes['l2'])
-                elif self.controller.axes['r2'] > -.9:
-                    self.motors.slewHead(self.controller.axes['r2'])
+                if self.controller.axes['l2'] > -.5:
+                    self.motors.slewHead(self.controller.axes['l2'],True)
+                elif self.controller.axes['r2'] > -.5:
+                    self.motors.slewHead(self.controller.axes['r2'],False)
 
 
 
@@ -145,8 +145,11 @@ class motorController:
     def ranging(self):
         print(self.distSensor.read_mm())
 
-    def slewHead(self,rate):
-        self.headAngle += self.scale(rate,-0.9,1.0,0,1)
+    def slewHead(self,rate,clockwise):
+        if clockwise:
+            self.headAngle += self.scale(rate,-0.5,1.0,0,1)
+        else:
+            self.headAngle -= self.scale(rate, -0.5, 1.0, 0, 1)
         self.head(self.headAngle)
 
     def led(self,r,g,b,led):
