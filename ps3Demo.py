@@ -16,6 +16,7 @@ class ps3GoPiGo:
     def run(self):
         done = False
         rangeLock = False
+        range = 999999
         while not done:
             self.controller.update()
 
