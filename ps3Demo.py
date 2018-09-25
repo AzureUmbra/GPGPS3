@@ -132,9 +132,10 @@ class motorController:
             if count == 0:
                 self.led(255,0,0,0)
                 self.led(0,0,255,1)
-            elif count == 2:
+            elif count == 20:
                 self.led(255, 0, 0, 1)
                 self.led(0, 0, 255, 0)
+            elif count == 40:
                 count = 0
             if mode == 0:
                 dist = self.ranging()
