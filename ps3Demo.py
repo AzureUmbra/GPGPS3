@@ -148,9 +148,9 @@ class motorController:
 
     def slewHead(self,rate,clockwise):
         if clockwise:
-            self.headAngle = self.headAngle + self.scale(rate,-0.5,1.0,0,1)
+            self.headAngle = self.headAngle + rate + .5
         else:
-            self.headAngle = self.headAngle - self.scale(rate, -0.5, 1.0, 0, 1)
+            self.headAngle = self.headAngle - (rate + .5)
         print(self.headAngle)
         self.head(self.headAngle)
 
