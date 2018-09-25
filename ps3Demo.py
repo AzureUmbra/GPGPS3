@@ -36,18 +36,14 @@ class ps3GoPiGo:
             elif self.mode == 2:
                 self.motors.driveTank(self.controller.axes['leftV'],self.controller.axes['rightV'])
 
-            if self.controller.buttons['square'] == 1:
-                self.motors.ranging()
             if self.controller.buttons['up'] == 1:
                 self.headActive = True
-                self.motors.led(0,0,255,4)
             if self.controller.buttons['down'] == 1:
                 self.headActive = False
-                self.motors.led(0, 0, 0,4)
                 self.motors.head(0)
                 self.motors.rangeLights(True)
 
-            if self.headActive and self.mode != 2:
+            if self.headActive:
                 self.motors.head(round(self.controller.axes['rightH'],2))
                 # if (1.0+self.controller.axes['l2'])/2.0 > 0.1 and self.headAngle > -90:
                 #     self.headAngle -= ((1.0+self.controller.axes['l2'])/2.0)/5
