@@ -130,9 +130,11 @@ class motorController:
                 run = False
             count += 1
             if count == 0:
+                print('left')
                 self.gpg.set_led(self.gpg.LED_EYE_LEFT,255,0,0)
                 self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 0, 0, 255)
             elif count == 3:
+                print('right')
                 self.gpg.set_led(self.gpg.LED_EYE_LEFT, 0, 0, 255)
                 self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 255, 0, 0)
             elif count == 6:
@@ -157,7 +159,7 @@ class motorController:
                 dist = self.ranging()
                 if dist > 500:
                     self.motors(0,0)
-                    run = False
+                    mode = 0
             sleep(0.08)
 
 
