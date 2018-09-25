@@ -129,15 +129,15 @@ class motorController:
             if control.buttons['start'] == 1:
                 run = False
             count += 1
-            if count == 0:
+            if count == 1:
                 print('left')
                 self.gpg.set_led(self.gpg.LED_EYE_LEFT,255,0,0)
                 self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 0, 0, 255)
-            elif count == 3:
+            elif count == 4:
                 print('right')
                 self.gpg.set_led(self.gpg.LED_EYE_LEFT, 0, 0, 255)
                 self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 255, 0, 0)
-            elif count == 6:
+            elif count == 7:
                 count = 0
             if mode == 0:
                 dist = self.ranging()
