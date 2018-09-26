@@ -51,8 +51,9 @@ class ps3GoPiGo:
                 self.motors.driveTank(self.controller.axes['leftV'],self.controller.axes['rightV'])
             elif self.mode == 3:
                 self.count += 1
-                if self.count > 500:
+                if self.count > 10:
                     range = self.motors.ranging()
+                    print(range)
                     self.count = 0
                 if range < 100 and not rangeLock:
                     rangeLock = True
@@ -60,12 +61,12 @@ class ps3GoPiGo:
                     rangeLock = False
                 if rangeLock:
                     self.motors.motors(-100,-100)
-                    self.motors.led(255, 0, 0, 0)
-                    self.motors.led(255, 0, 0, 1)
+                    self.motors.led(128, 0, 0, 0)
+                    self.motors.led(128, 0, 0, 1)
                 else:
                     self.motors.led(0, 0, 0, 0)
                     self.motors.led(0, 0, 0, 1)
-                    self.motors.driveModThresholdCircle(self.controller.axes['leftH'], self.controller.axes['leftV'],(float(range-150)/2150))
+                    self.motors.driveModThresholdCircle(self.controller.axes['leftH'], self.controller.axes['leftV'],0.1+(float(range-100)/2150))
 
 
             if self.controller.buttons['up'] == 1 and self.mode != 3:
@@ -83,7 +84,7 @@ class ps3GoPiGo:
                 #     self.headAngle += ((1.0+self.controller.axes['r2'])/2.0)/5
                 # self.motors.head(self.headAngle)
                 self.count += 1
-                if self.count > 500:
+                if self.count > 10:
                     self.motors.rangeLights()
                     self.count = 0
             sleep(0.08)
@@ -105,6 +106,7 @@ class motorController:
         self.curColor = 0
 
     def driveModThresholdCircle(self,x,y,mut=1.0):
+        mut = 1.0 if mut > 1.0 else mut
         r,theta = self.rTheta(x,y)
         left = int(round(self.scale(r,0.0,1.0,0,self.maxSpeed),0))
         right = left
@@ -132,13 +134,11 @@ class motorController:
             if count == 2:
                 count = 0
             if count == 0:
-                print('left')
-                self.gpg.set_led(self.gpg.LED_EYE_LEFT,255,0,0)
-                self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 0, 0, 255)
+                self.gpg.set_led(self.gpg.LED_EYE_LEFT,128,0,0)
+                self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 0, 0, 128)
             elif count == 1:
-                print('right')
-                self.gpg.set_led(self.gpg.LED_EYE_LEFT, 0, 0, 255)
-                self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 255, 0, 0)
+                self.gpg.set_led(self.gpg.LED_EYE_LEFT, 0, 0, 128)
+                self.gpg.set_led(self.gpg.LED_EYE_RIGHT, 128, 0, 0)
             if mode == 0:
                 dist = self.ranging()
                 if dist < 150:
@@ -230,23 +230,24 @@ class motorController:
             self.led(0,0,0,1)
         else:
             rnge = self.ranging()
+            print(rnge)
             if rnge >= 2000:
-                r,g,b=0,0,255
+                r,g,b=0,0,128
                 newColor = 0
             elif 2000 > rnge >= 1000:
-                r,g,b = 0,255,0
+                r,g,b = 0,128,0
                 newColor = 1
             elif 1000 > rnge >= 500:
-                r,g,b = 128,255,0
+                r,g,b = 64,128,0
                 newColor = 2
             elif 500 > rnge >= 100:
-                r,g,b = 255,255,0
+                r,g,b = 128,128,0
                 newColor = 3
             elif 100 > rnge >= 50:
-                r,g,b = 255,128,0
+                r,g,b = 128,64,0
                 newColor = 4
             elif 50 > rnge:
-                r,g,b = 255,0,0
+                r,g,b = 128,0,0
                 newColor = 5
             if self.curColor != newColor:
                 self.curColor = newColor
